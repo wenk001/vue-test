@@ -1,58 +1,86 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
-  </div>
-</template>
+  <a-card>
+    <div style="width:100%;height:60px;">
+       <a-form layout="inline">
+        <a-row :gutter="24">
 
+          <a-col :span="6">
+            <a-form-item label="账号">
+              <a-input placeholder="请输入账号查询"></a-input>
+            </a-form-item>
+          </a-col>
+
+          <a-col :span="6">
+            <a-form-item label="性别">
+              <a-select placeholder="请选择性别查询" style="width:100%">
+                <a-select-option value="0">请选择性别查询</a-select-option>
+                <a-select-option value="1">男性</a-select-option>
+                <a-select-option value="2">女性</a-select-option>
+              </a-select>
+            </a-form-item>
+          </a-col>
+
+
+          <template v-if="true">
+            <a-col :span="6">
+              <a-form-item label="邮箱">
+                <a-input placeholder="请输入邮箱查询"></a-input>
+              </a-form-item>
+            </a-col>
+
+            <a-col :span="6">
+              <a-form-item label="手机号码">
+                <a-input placeholder="请输入手机号码查询"></a-input>
+              </a-form-item>
+            </a-col>
+
+            <a-col :span="6">
+              <a-form-item label="状态">
+                <a-select placeholder="请选择用户状态查询">
+                  <a-select-option value="0">请选择用户状态</a-select-option>
+                  <a-select-option value="1">正常</a-select-option>
+                  <a-select-option value="2">解冻</a-select-option>
+                </a-select>
+              </a-form-item>
+            </a-col>
+          </template>
+
+          <a-col :span="6" >
+            <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
+              <a-button type="primary" icon="search">查询</a-button>
+              <a-button type="primary" icon="reload" style="margin-left: 8px">重置</a-button>
+            </span>
+          </a-col>
+
+        </a-row>
+      </a-form>
+    </div>
+  </a-card>
+</template>
 <script>
 export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String
-  }
-}
-</script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+}
+
+</script>
 <style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+  .ant-card-body .table-operator{
+    margin-bottom: 18px;
+  }
+  .ant-layout-content{
+    margin:12px 16px 0 !important;
+  }
+  .ant-table-tbody .ant-table-row td{
+    padding-top:15px;
+    padding-bottom:15px;
+  }
+  .anty-row-operator button{margin: 0 5px}
+  .ant-btn-danger{background-color: #ffffff}
+
+  .ant-modal-cust-warp{height: 100%}
+  .ant-modal-cust-warp .ant-modal-body{height:calc(100% - 110px) !important;overflow-y: auto}
+  .ant-modal-cust-warp .ant-modal-content{height:90% !important;overflow-y: hidden}
+
+  .anty-img-wrap{height:25px;position: relative;}
+  .anty-img-wrap > img{max-height:100%;}
 </style>

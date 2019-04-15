@@ -16,6 +16,7 @@
           { rules: [{ required: true, message: 'Please input your username!' }] }
         ]"
         placeholder="用户名"
+        v-model="username"
       >
         <a-icon
           slot="prefix"
@@ -32,6 +33,7 @@
         ]"
         type="password"
         placeholder="密码"
+        v-model="password"
       >
         <a-icon
           slot="prefix"
@@ -45,21 +47,51 @@
         type="primary"
         html-type="submit"
         class="login-form-button"
+         @click="handleSubmit"
       >
         登录
       </a-button>
     </a-form-item>
   </a-form>
+  <a-modal
+      title="用户信息："
+      v-model="visible"
+      @ok="handleOk"
+    >
+      <p>Some contents...</p>
+      <p>Some contents...</p>
+      <p>Some contents...</p>
+    </a-modal>
   </div>
 </template>
 
 <script>
-
+  import api from '@/api'
+  import { mapActions } from "vuex"
+  import Vue from 'vue'
 export default {
+
+  data: function () {
+    return {
+      username:"",
+      password:"",
+      visible:false
+    }
+  },
   beforeCreate () {
     this.form = this.$form.createForm(this);
   },
+   created () {
+      Vue.ls.remove('ACCESS_TOKEN')
+   },
   methods: {
+    showModal() {
+      this.visible = true
+    },
+    handleOk(e) {
+      this.visible = false
+    },
+    ...mapActions([ "Login"]),
     handleSubmit (e) {
       e.preventDefault();
       this.form.validateFields((err, values) => {
@@ -67,7 +99,21 @@ export default {
           console.log('Received values of form: ', values);
         }
       });
+      let loginParams={
+        username:this.$data.username,
+        password:this.$data.password,
+      }
+      let that=this
+      that.Login(loginParams).then(() => {
+            that.loginSuccess()
+            
+        }).catch((err) => {
+          that.requestFailed(err);
+        })
     },
+    loginSuccess(){
+      showModal();
+    }
   },
 };
 </script>

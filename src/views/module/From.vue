@@ -8,7 +8,9 @@
       label="用户名"
     >
       <a-input
-       
+        v-decorator="[
+          'username',
+        ]"
       />
     </a-form-item>
     <a-form-item
@@ -53,16 +55,17 @@
       v-bind="formItemLayout"
       label="性别"
     >
-      <a-cascader
-        v-decorator="[
-          'residences',
-          {
-            rules: [{ type: 'array', required: true, message: '请选择你的性别！' }],
-          }
+      <a-select  
+      v-decorator="[
+          'sex',
         ]"
-        :options="residences"
-      />
+        >
+      <a-select-option value="1">男</a-select-option>
+      <a-select-option value="2">女</a-select-option>
+  </a-select>
     </a-form-item>
+
+
     <a-form-item
       v-bind="formItemLayout"
       label="手机号"
@@ -101,25 +104,24 @@
     >
       <Avatar/>
     </a-form-item>
-    
+    <a-form-item v-bind="tailFormItemLayout">
+      <a-button
+        type="primary"
+        html-type="submit"
+      >
+        Register
+      </a-button>
+    </a-form-item>
   </a-form>
 </template>
 
 <script>
 import Avatar from './Avatar'
-const residences = [{
-  value: 1,
-  label: '男性',
-}, {
-  value: 2,
-  label: '女性',
-}];
 
 export default {
   data () {
     return {
       confirmDirty: false,
-      residences,
       autoCompleteResult: [],
       formItemLayout: {
         labelCol: {
@@ -151,13 +153,16 @@ export default {
   beforeCreate () {
     this.form = this.$form.createForm(this);
   },
+  mounted(){
+    this.form.setFieldsValue({username:'wk'});
+  },
   methods: {
     handleSubmit  (e) {
       e.preventDefault();
       this.form.validateFieldsAndScroll((err, values) => {
         if (!err) {
             
-          console.log(this.from);
+          console.log(this.form.getFieldValue(['username','password']));
         }
       });
     },

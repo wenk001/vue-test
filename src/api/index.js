@@ -1,4 +1,4 @@
 const api = {
-    Login: '/sys/login',
+    UserList: '/user/list',
 }
 export default api

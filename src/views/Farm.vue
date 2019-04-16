@@ -119,12 +119,12 @@ const columns = [{
   width: '11%',
 }, {
   title: '真实姓名',
-  dataIndex: 'name',
+  dataIndex: 'realName',
   sorter: true,
   width: '11%',
 }, {
   title: '性别',
-  dataIndex: 'gender',
+  dataIndex: 'sex',
   sorter: true,
   filters: [
     { text: '男', value: 'male' },
@@ -139,11 +139,6 @@ const columns = [{
                 return text;
               }
             },
-  width: '11%',
-}, {
-  title: '所属基地',
-  dataIndex: 'farm',
-  sorter: true,
   width: '11%',
 }, {
   title: '手机号码',
@@ -170,6 +165,11 @@ const columns = [{
   sorter: true,
   width: '11%',
 }, {
+  title:'修改详情',
+  dataIndex:'createWhere',
+  sorter:true,
+  width:'11%',
+}, {
   title: '操作',
   dataIndex: 'action',
   scopedSlots: { customRender: 'action' },
@@ -178,7 +178,7 @@ const columns = [{
   width: 150,
 }];
 
-const data = [];
+/*const data = [];
 for (let i = 0; i < 50; i++) {
   data.push({
     key: i,
@@ -191,11 +191,11 @@ for (let i = 0; i < 50; i++) {
     createTime: '2019-04-14',
     updateTime: '2019-04-15',
   });
-}
+}*/
 export default {
   data() { 
     return {
-      data,
+      data:this.$store.state.userdata.result,
       selectedRowKeys: [],
       loading: false,
       columns,
@@ -212,6 +212,9 @@ export default {
         },
     }
   },
+  created() {
+      this.loadData();
+    },
    computed: {
     hasSelected() {
       return this.selectedRowKeys.length > 0
@@ -231,8 +234,10 @@ export default {
     },
     onClearSelected(){
       this.selectedRowKeys=[];
+    },
+    loadData(){
+        this.$store.dispatch(GetuserList)
     }
-
     
   },
 }

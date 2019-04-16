@@ -1,135 +1,136 @@
 <template>
-<div>
-<div style="margin: 16px 0 16px 10px;">
-  <a-button
-        type="primary"
-        icon="plus"
-      >
-        添加用户
-      </a-button>
-      <a-button
-        type="primary"
-        @click="start"
-        :disabled="!hasSelected"
-        :loading="loading"
-        style="margin-left:10px;"
-      >
-        批量操作
-      </a-button>
-      <span style="margin-left: 8px">
-        <template v-if="hasSelected">
-          {{`选择了 ${selectedRowKeys.length} 条记录`}}
-        </template>
-      </span>
+<div style="width:100%;height:auto;padding:16px;background:#e5e5e5;">
+  <div style="background:white;padding:10px 0 10px 0;">
+     <div style="border:1px solid  rgb(14, 171, 243);margin:0 1% 16px 1%;">
+    <h2 style="width:90px; margin:auto;">条件查询:</h2>
+    <div>
+      <div class="select">
+         <a-form>
+        <div style="float:left;width:24.25%;height:50px;margin-right:1%;margin-bottom:10px;">
+          <a-form-item>
+              <a-input placeholder="账号查询" addonBefore="账号"></a-input>
+            </a-form-item>
+        </div>
+        <div style="float:left;width:24.25%;height:50px;margin-right:1%;margin-bottom:10px;">
+          <a-form-item>
+                <a-input placeholder="手机号码查询" addonBefore="手机号"></a-input>
+              </a-form-item>
+        </div>
+        <div style="float:left;width:24.25%;height:50px;margin-right:1%;margin-bottom:10px;">
+          <a-form-item>
+            <a-input placeholder="邮箱查询" addonBefore="邮箱"></a-input>
+            </a-form-item>
+        </div>
+        <div style="float:left;width:24.25%;height:50px;">
+          <a-form-item>
+            <a-input placeholder="真实姓名" addonBefore="姓名"></a-input>
+            </a-form-item>
+        </div>
+         </a-form>
+      </div>
+      <div style="width:172px;margin:auto;margin-bottom:10px;">
+        <a-button type="primary" icon="search">查询</a-button>
+        <a-button type="primary" icon="reload" style="margin-left: 8px">重置</a-button>
+      </div>
+    </div>
+  </div>
+<div style="margin: 0 0 16px 5px;">
+     <UserModule/>
 </div>
-
+<div>
   <a-table :columns="columns"
-    :dataSource="data"
+    :dataSource="datas"
     :pagination="pagination"
     :loading="loading"
-    :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
     bordered
   >
-  
+   <span slot="action" slot-scope="text, record">
+          <a>编辑</a>
+
+          <a-divider type="vertical" />
+          <a-dropdown>
+            <a class="ant-dropdown-link">
+              更多 <a-icon type="down" />
+            </a>
+            <a-menu slot="overlay">
+              <a-menu-item >
+                <a href="javascript:;" >详情</a>
+              </a-menu-item>
+
+              <a-menu-item >
+                <a href="javascript:;" >修改密码</a>
+              </a-menu-item>
+
+              <a-menu-item>
+                <a-popconfirm title="确定删除吗?">
+                  <a>删除</a>
+                </a-popconfirm>
+              </a-menu-item>
+
+              <a-menu-item v-if="record.status==1">
+                <a-popconfirm title="确定冻结吗?">
+                  <a>冻结</a>
+                </a-popconfirm>
+              </a-menu-item>
+
+              <a-menu-item v-if="record.status==2">
+                <a-popconfirm title="确定解冻吗?">
+                  <a>解冻</a>
+                </a-popconfirm>
+              </a-menu-item>
+
+            </a-menu>
+          </a-dropdown>
+        </span>
   </a-table>
-  <div>
-  <h1>按条件查询:</h1>
-     <div>
-       <a-form layout="inline">
-        <a-row :gutter="10">
-
-          <a-col :span="5">
-            <a-card>
-            <a-form-item label="账号">
-              <a-input placeholder="账号查询"></a-input>
-            </a-form-item>
-            </a-card>
-          </a-col>
-
-          <a-col :span="5">
-            <a-card>
-            <a-form-item label="性别">
-              <a-select placeholder="性别查询">
-                <a-select-option value="1">男性</a-select-option>
-                <a-select-option value="2">女性</a-select-option>
-              </a-select>
-            </a-form-item>
-            </a-card>
-          </a-col>
-
-            
-
-            <a-col :span="5">
-              <a-card>
-              <a-form-item label="状态">
-                <a-select placeholder="状态查询">
-                  <a-select-option value="1">正常</a-select-option>
-                  <a-select-option value="2">解冻</a-select-option>
-                </a-select>
-              </a-form-item>
-              </a-card>
-            </a-col>
-
-            <a-col :span="5">
-              <a-card>
-              <a-form-item label="手机">
-                <a-input placeholder="手机号码查询"></a-input>
-              </a-form-item>
-              </a-card>
-            </a-col>
-
-        </a-row>
-        <div style="width:172px;margin:10px 40% 10px 40%;overflow: hidden;" class="table-page-search-submitButtons">
-              <a-button type="primary" icon="search">查询</a-button>
-              <a-button type="primary" icon="reload" style="margin-left: 8px">重置</a-button>
-            </div>
-      </a-form>
-    </div>
-
-
+  </div>
+ 
   </div>
 </div>
 
 </template>
 
 <script>
+import { version } from 'punycode';
+import UserModule from './module/UserModule'
 const columns = [{
   title: '账号',
   dataIndex: 'username',
   sorter: true,
   width: '11%',
-  scopedSlots: { customRender: 'username' },
 }, {
   title: '真实姓名',
-  dataIndex: 'name',
+  dataIndex: 'realName',
   sorter: true,
   width: '11%',
-  scopedSlots: { customRender: 'name' },
 }, {
   title: '性别',
-  dataIndex: 'gender',
+  dataIndex: 'sex',
   sorter: true,
   filters: [
     { text: '男', value: 'male' },
     { text: '女', value: 'female' },
   ],
-  scopedSlots: { customRender: 'gender' },
-  width: '11%',
-}, {
-  title: '邮箱',
-  dataIndex: 'email',
-  width: '11%',
+  customRender:function (text) {
+              if(text==1){
+                return "男";
+              }else if(text==2){
+                return "女";
+              }else{
+                return text;
+              }
+            },
+  //width: '11%',
 }, {
   title: '手机号码',
   dataIndex: 'phone',
   key: 'phone',
-  width: '11%',
+  //width: '11%',
 }, {
   title: '状态',
   dataIndex: 'status',
   sorter: true,
-  width: '11%',
-  scopedSlots: { customRender: 'status' },
+ // width: '11%',
   filters: [
     { text: '正常', value: 'normal' },
     { text: '冻结', value: 'freeze' },
@@ -138,47 +139,59 @@ const columns = [{
   title: '注册时间',
   dataIndex: 'createTime',
   sorter: true,
-  width: '11%',
-  scopedSlots: { customRender: 'createTime' },
+  //width: '11%',
 }, {
   title: '修改时间',
   dataIndex: 'updateTime',
   sorter: true,
-  width: '11%',
-  scopedSlots: { customRender: 'updateTime' },
+  //width: '11%',
+}, {
+  title:'修改详情',
+  dataIndex:'createWhere',
+  sorter:true,
+  //width:'11%',
 }, {
   title: '操作',
-  dataIndex: 'move',
-  width: '11%',
+  dataIndex: 'action',
+  scopedSlots: { customRender: 'action' },
+  fixed:"right",
+  align:"center",
+  width: 150,
 }];
 
-const data = [];
-for (let i = 0; i < 5; i++) {
-  data.push({
-    key: i,
-    username: `wk ${i}`,
-    name: `温凯 ${i}`,
-    gender: '男',
-    phone: '12123132132',
-    email: '111111111@qq.com',
-    status: '正常',
-    createTime: '2019-04-14',
-    updateTime: '2019-04-15',
-  });
-}
 export default {
-  data() {
+  components:{
+    UserModule,
+  },
+  data() { 
     return {
-      data,
-      pagination: {},
       selectedRowKeys: [],
       loading: false,
       columns,
+      pagination:{
+          current: 1,
+          pageSize: 8,
+          pageSizeOptions: ['6', '12', '24'],
+          showTotal: (total, range) => {
+            return range[0] + "-" + range[1] + " 共" + total + "条"
+          },
+          showQuickJumper: true,
+          showSizeChanger: true,
+          total: 0
+        },
     }
   },
+  created() {
+      this.loadData();
+     
+    },
    computed: {
     hasSelected() {
       return this.selectedRowKeys.length > 0
+    },
+    datas(){
+      
+       return this.$store.state.user.userData
     }
   },
   methods: {
@@ -192,11 +205,25 @@ export default {
     },
     onSelectChange (selectedRowKeys) {
       this.selectedRowKeys = selectedRowKeys
-    }
-    
+    },
+    onClearSelected(){
+      this.selectedRowKeys=[];
+    },
+    loadData(){
+      this.loading = true;
+      this.$store.dispatch('GetuserList')
+      this.loading = false;
+    },
   },
 }
 </script>
 <style scoped>
+.select::after{
+  clear:both;
+  content:'';
+  display:block;
+  width:0;
+  height:0;
 
+}
 </style>

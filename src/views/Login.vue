@@ -54,19 +54,17 @@
     </a-form-item>
   </a-form>
   <a-modal
-      title="用户信息："
+      title="登陆成功："
       v-model="visible"
       @ok="handleOk"
     >
-      <p>Some contents...</p>
-      <p>Some contents...</p>
-      <p>Some contents...</p>
+      <p>{{username}}</p>
+      <p>{{realname}}</p>
     </a-modal>
   </div>
 </template>
 
 <script>
-  import api from '@/api'
   import { mapActions } from "vuex"
   import Vue from 'vue'
 export default {
@@ -75,6 +73,7 @@ export default {
     return {
       username:"",
       password:"",
+      realname:"",
       visible:false
     }
   },
@@ -85,12 +84,7 @@ export default {
       Vue.ls.remove('ACCESS_TOKEN')
    },
   methods: {
-    showModal() {
-      this.visible = true
-    },
-    handleOk(e) {
-      this.visible = false
-    },
+    
     ...mapActions([ "Login"]),
     handleSubmit (e) {
       e.preventDefault();
@@ -105,6 +99,7 @@ export default {
       }
       let that=this
       that.Login(loginParams).then(() => {
+            this.realname=this.$store.state.name
             that.loginSuccess()
             
         }).catch((err) => {
@@ -112,8 +107,11 @@ export default {
         })
     },
     loginSuccess(){
-      showModal();
-    }
+      this.visible=true
+    },
+    handleOk() {
+      this.visible = false
+    },
   },
 };
 </script>

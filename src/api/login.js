@@ -11,8 +11,6 @@ import api from './index'
  * @param parameter
  * @returns {*}
  */
-
-export default api
 export function login(parameter) {
   return axios({
     url: api.Login,

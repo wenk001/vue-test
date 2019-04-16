@@ -1,13 +1,12 @@
 import { axios } from '@/utils/request'
 
-function getAction(url,parameter) {
+function getAction(url) {
     return axios({
       url: url,
       method: 'get',
-      params: parameter
     })
   }
 
-  const queryUSELISTByUser = (params)=>getAction("/sys/permission/queryByUser",params);
+  const getUserList = ()=>getAction("/user/list");
 
-  export {queryUSELISTByUser}
+  export {getUserList}

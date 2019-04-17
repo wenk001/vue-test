@@ -10,6 +10,9 @@
       <a-input
         v-decorator="[
           'username',
+          {
+            rules: [{ required: true, message: '请输入用户名' }],
+          }
         ]"
       />
     </a-form-item>
@@ -22,7 +25,7 @@
           'password',
           {
             rules: [{
-              required: true, message: 'Please input your password!',
+              required: true, message: '请输入密码',
             }, {
               validator: validateToNextPassword,
             }],
@@ -40,7 +43,7 @@
           'confirm',
           {
             rules: [{
-              required: true, message: 'Please confirm your password!',
+              required: true, message: '请再输入一次密码',
             }, {
               validator: compareToFirstPassword,
             }],
@@ -58,10 +61,13 @@
       <a-select  
       v-decorator="[
           'sex',
+          {
+            rules: [{ required: true, message: '请选择你的性别' }],
+          }
         ]"
         >
-      <a-select-option value="1">男</a-select-option>
-      <a-select-option value="2">女</a-select-option>
+      <a-select-option value="0">男</a-select-option>
+      <a-select-option value="1">女</a-select-option>
   </a-select>
     </a-form-item>
 
@@ -90,9 +96,9 @@
           'email',
           {
             rules: [{
-              type: 'email', message: 'The input is not valid E-mail!',
+              type: 'email', message: '这不是一个正确的邮箱',
             }, {
-              required: true, message: 'Please input your E-mail!',
+              required: true, message: '请输入邮箱',
             }]
           }
         ]"
@@ -109,7 +115,7 @@
         type="primary"
         html-type="submit"
       >
-        Register
+        确认添加
       </a-button>
     </a-form-item>
   </a-form>
@@ -153,19 +159,7 @@ export default {
   beforeCreate () {
     this.form = this.$form.createForm(this);
   },
-  mounted(){
-    this.form.setFieldsValue({username:'wk'});
-  },
   methods: {
-    handleSubmit  (e) {
-      e.preventDefault();
-      this.form.validateFieldsAndScroll((err, values) => {
-        if (!err) {
-            
-          console.log(this.form.getFieldValue(['username','password']));
-        }
-      });
-    },
     handleConfirmBlur  (e) {
       const value = e.target.value;
       this.confirmDirty = this.confirmDirty || !!value;
@@ -173,7 +167,7 @@ export default {
     compareToFirstPassword  (rule, value, callback) {
       const form = this.form;
       if (value && value !== form.getFieldValue('password')) {
-        callback('Two passwords that you enter is inconsistent!');
+        callback('两次密码不一样');
       } else {
         callback();
       }
@@ -185,7 +179,17 @@ export default {
       }
       callback();
     },
-    
+    handleSubmit  (e) {
+      e.preventDefault();
+      this.form.validateFieldsAndScroll((err, values) => {
+        if (!err) {
+         const userinfo=this.form.getFieldsValue(['username','password','phone','sex','email']) 
+         this.$store.dispatch('Adduser',userinfo)
+         this.$message.info(this.$store.state.user.addinfo)
+         //console.log(this.form.getFieldsValue(['username','password','phone','sex','email']))
+        }
+      });
+    },
   },
 };
 </script>

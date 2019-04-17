@@ -34,7 +34,7 @@
       </div>
     </div>
   </div>
-<div style="margin: 0 0 16px 5px;">
+<div style="margin: 0 0 16px 10px;">
      <UserModule/>
 </div>
 <div>
@@ -42,6 +42,7 @@
     :dataSource="datas"
     :pagination="pagination"
     :loading="loading"
+    :rowKey="datas => datas.uid"
     bordered
   >
    <span slot="action" slot-scope="text, record">
@@ -91,21 +92,24 @@
 </template>
 
 <script>
-import { version } from 'punycode';
+//import { version } from 'punycode';
 import UserModule from './module/UserModule'
 const columns = [{
   title: '账号',
   dataIndex: 'username',
+  key:'username',
   sorter: true,
   width: '11%',
 }, {
   title: '真实姓名',
   dataIndex: 'realName',
+  key:'realName',
   sorter: true,
   width: '11%',
 }, {
   title: '性别',
   dataIndex: 'sex',
+  key: 'sex',
   sorter: true,
   filters: [
     { text: '男', value: 'male' },
@@ -129,6 +133,7 @@ const columns = [{
 }, {
   title: '状态',
   dataIndex: 'status',
+  key: 'status',
   sorter: true,
  // width: '11%',
   filters: [
@@ -138,21 +143,25 @@ const columns = [{
 }, {
   title: '注册时间',
   dataIndex: 'createTime',
+  key: 'createTime',
   sorter: true,
   //width: '11%',
 }, {
   title: '修改时间',
   dataIndex: 'updateTime',
+  key: 'updateTime',
   sorter: true,
   //width: '11%',
 }, {
   title:'修改详情',
   dataIndex:'createWhere',
+  key: 'createWhere',
   sorter:true,
   //width:'11%',
 }, {
   title: '操作',
   dataIndex: 'action',
+  key: 'action',
   scopedSlots: { customRender: 'action' },
   fixed:"right",
   align:"center",
@@ -165,20 +174,18 @@ export default {
   },
   data() { 
     return {
-      selectedRowKeys: [],
       loading: false,
       columns,
       pagination:{
-          current: 1,
-          pageSize: 8,
-          pageSizeOptions: ['6', '12', '24'],
+          current: 2,
+          pageSize: 10,
+          pageSizeOptions: ['10', '20', '30'],
           showTotal: (total, range) => {
             return range[0] + "-" + range[1] + " 共" + total + "条"
           },
           showQuickJumper: true,
           showSizeChanger: true,
-          total: 0
-        },
+          total: 0}
     }
   },
   created() {
@@ -191,8 +198,9 @@ export default {
     },
     datas(){
       
-       return this.$store.state.user.userData
-    }
+       return this.$store.state.user.userData.list
+    },
+    
   },
   methods: {
     start () {
@@ -211,7 +219,7 @@ export default {
     },
     loadData(){
       this.loading = true;
-      this.$store.dispatch('GetuserList')
+      this.$store.dispatch('GetuserList',{pageNo:"1",pageSize:"30"})
       this.loading = false;
     },
   },

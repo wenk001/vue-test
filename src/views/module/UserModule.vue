@@ -13,7 +13,7 @@
       @ok="handleOk"
       style="top:5%;height: 95%;overflow-y: hidden"
       cancelText="取消添加"
-      okText="确认添加"
+      okText="完成添加"
     >
       <From/>
     </a-modal>
@@ -39,7 +39,6 @@ export default {
       this.visible=true
     },
     handleOk(e) {
-      console.log(e);
       this.visible = false
     },
   }

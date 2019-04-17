@@ -1,10 +1,10 @@
 <template>
   <a-upload
-    name="avatar"
+    name="file"
     listType="picture-card"
     class="avatar-uploader"
     :showUploadList="false"
-    action="//jsonplaceholder.typicode.com/posts/"
+    action="/api/upload/image"
     :beforeUpload="beforeUpload"
     @change="handleChange"
   >
@@ -36,7 +36,9 @@ export default {
       }
       if (info.file.status === 'done') {
         // Get this url from response in real world.
+        //console.log(info)
         getBase64(info.file.originFileObj, (imageUrl) => {
+
           this.imageUrl = imageUrl
           this.loading = false
         })
